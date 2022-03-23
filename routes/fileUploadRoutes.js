@@ -6,8 +6,6 @@ const multer = require("multer");
 const Huffman = require("../algorithms/huffman/huffman");
 const Lzw = require("../algorithms/lzw/lzw");
 const Lz77 = require("lzbase62");
-let huffSize,lzwSize,lz77Size;
-
 
 //file upload
 const storage = multer.diskStorage({
@@ -27,7 +25,7 @@ const upload = multer({
   },
 });
 
-const waitAndGetSize = async(fileName1,type) => {
+const waitAndGetSize = async(fileName1) => {
     let sizeInBytes;
     return await new Promise(resolve => {
       const interval = setInterval(() => {
@@ -67,11 +65,12 @@ router.get("/home", async (req, res) => {
   res.render("homePage");
 });
 
-router.post("/addFile", upload.single("file"), async (req, res) => {
+router.post("/encodeData", upload.single("file"), async (req, res) => {
   const data = fs.readFileSync(`./public/uploads/${req.file.filename}`, {
     encoding: "utf8",
     flag: "r",
   });
+  let huffSize,lzwSize,lz77Size;
 
   const huffmanObj = new Huffman();
   let [encodedHuffmanString, outputMsg] = huffmanObj.encode(data);
