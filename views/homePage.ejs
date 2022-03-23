@@ -7,9 +7,27 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Encode Data</h1>
     <form action='/encodeData' method="POST" enctype='multipart/form-data'>
         <input type="file" id="file" name="file" required />
-        <button type="submit">LOGIN</button>
+        <button type="submit">Encode</button>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <h1>Decode Data</h1>
+    <form action='/decodeData' method="POST" enctype='multipart/form-data'>
+        <input type="file" id="file" name="file" required />
+        <br/>
+        <select name="algos" id="algos">
+            <option value="huffman">Huffman</option>
+            <option value="lzw">LZW</option>
+            <option value="lz77">LZ77</option>
+            
+        </select>
+        <button type="submit">DECODE</button>
+        <br/>
+
     </form>
 </body>
 </html>

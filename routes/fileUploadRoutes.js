@@ -19,10 +19,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage,
-  fileFilter: function (req, file, callback) {
-    checkFileType(file, callback);
-  },
+  storage: storage
 });
 
 const waitAndGetSize = async(fileName1) => {
@@ -50,16 +47,12 @@ const readWriteFile = async(fileName, encodedString, type) => {
 
 };
 
-function checkFileType(file, callback, req, res) {
-  const filetypes = ["text/plain"];
-  const mimetype = filetypes.includes(file.mimetype);
+const readWriteFileDecode = (fileName, decodedString) => {
+  let filePath = `./public/uploads/${fileName.slice(0, fileName.length - 4)}.txt`;
+  fs.writeFileSync(filePath, decodedString);
+  return filePath;
+};
 
-  if (mimetype) {
-    return callback(null, true);
-  } else {
-    callback("Error: Images only!");
-  }
-}
 
 router.get("/home", async (req, res) => {
   res.render("homePage");
@@ -86,5 +79,30 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
   res.send('huff size: ' + huffSize + ' lzw size: ' + lzwSize + ' lz77 size: ' + lz77Size);
 
 });
+
+
+router.post("/decodeData", upload.single("file"), async (req, res) => {
+  const data = fs.readFileSync(`./public/uploads/${req.file.filename}`, {
+    encoding: "utf8",
+    flag: "r",
+  });
+  const {algos} = req.body;
+
+  if(algos === "huffman"){
+    const huffmanObj = new Huffman();
+    let [decodedHuffmanString, outputMsg] = huffmanObj.decode(data);
+    let filePath = readWriteFileDecode(req.file.filename, decodedHuffmanString);
+    res.download(filePath);
+  }else if(algos === "lzw"){
+    const lzwObj = new Lzw();
+    let decodedLzwString = lzwObj.decode(data);
+    let filePath = readWriteFileDecode(req.file.filename, decodedLzwString);
+    res.download(filePath);
+  }else if(algos === "lz77"){
+    let decodedLz77String = Lz77.decompress(data);
+    let filePath = readWriteFileDecode(req.file.filename, decodedLz77String);
+    res.download(filePath);
+  }
+})
 
 module.exports = router;
