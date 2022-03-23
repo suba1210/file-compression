@@ -23,15 +23,14 @@ const upload = multer({
     }
 });
 
-const readWriteFile = (fileName, encodedString, type) => {
-    fileName = fileName.slice(0,fileName.length-3);
-    let writeStream = fs.createWriteStream(`./public/uploads/${fileName}${type}`);
-    writeStream.write(encodedString);  
-    let stats = fs.statSync(`./public/uploads/${fileName}${type}`) ;
-    console.log(stats);
+const readWriteFile = async(fileName, encodedString, type) => {
+    fileName = fileName.slice(0,fileName.length-4);
+    let writeStream = fs.createWriteStream(`./public/uploads/${fileName}-${type}.txt`);
+    await writeStream.write(encodedString);  
+    // let stats = fs.statSync(`./public/uploads/${fileName}-${type}.txt`);
+    // console.log(stats);
     // let fileSizeInBytes = stats.size;
     let fileSizeInBytes = 0;
-    return fileSizeInBytes;
 }
 
 function checkFileType(file, callback, req, res) {
@@ -54,19 +53,35 @@ router.get("/home", async (req, res) => {
 
 router.post("/addFile", upload.single("file"), async (req, res) => {
     const data = fs.readFileSync(`./public/uploads/${req.file.filename}`,{encoding:'utf8', flag:'r'});
+    let stats = fs.statSync(`./public/uploads/${req.file.filename}`);
+    console.log(stats);
+
 
     const huffmanObj = new Huffman();
     let [encodedHuffmanString, outputMsg] = huffmanObj.encode(data);
-    let huffSize = readWriteFile(req.file.filename, encodedHuffmanString, 'huff');
+    await readWriteFile(req.file.filename, encodedHuffmanString, 'huff');
+    let fileName1 = req.file.filename;
+    fileName1 = './public/uploads/' + fileName1.slice(0,fileName1.length-4) + '-huff.txt';
+    console.log(fileName1);
+    stats = fs.statSync(fileName1);
+    console.log(stats);
 
-    const lzwObj = new Lzw();
-    let encodedLzwString = lzwObj.encode(data);
-    let lzwSize = readWriteFile(req.file.filename,encodedLzwString,"lzw");
+    // const lzwObj = new Lzw();
+    // let encodedLzwString = lzwObj.encode(data);
+    // let lzwSize = readWriteFile(req.file.filename,encodedLzwString,"lzw");
+    // let fileName2 = req.file.filename;
+    // fileName2 = fileName1.slice(0,fileName2.length-4);
+    // stats = fs.statSync(`./public/uploads/${fileName2}-lzw.txt`);
+    // console.log(stats);
 
-    let encodedLz77String = Lz77.compress(data);
-    let lz77Size = readWriteFile(req.file.filename,encodedLz77String,"lz77");
+    // let encodedLz77String = Lz77.compress(data);
+    // let lz77Size = readWriteFile(req.file.filename,encodedLz77String,"lz77");
+    // let fileName3 = req.file.filename;
+    // fileName3 = fileName3.slice(0,fileName3.length-4);
+    // stats = fs.statSync(`./public/uploads/${fileName3}-lz77.txt`);
+    // console.log(stats);
 
-    res.send(`huffSize = ${huffSize}, lzwSize = ${lzwSize}, lz77Size = ${lz77Size}`);
+    res.send(`summa`);
 
 });
 
