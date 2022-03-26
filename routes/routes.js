@@ -47,8 +47,20 @@ const readWriteFile = async(fileName, encodedString, type) => {
 
 };
 
-const readWriteFileDecode = (fileName, decodedString) => {
-  let filePath = `./public/uploads/${fileName.slice(0, fileName.length - 4)}.txt`;
+const readWriteFileDecode = (fileName, decodedString,type) => {
+  let filePath;
+  if(type == "huff")
+  {
+    filePath = `./public/uploads/${fileName.slice(0, fileName.length - 4)}txt`;
+  }
+  else if(type == "lz77")
+  {
+    filePath = `./public/uploads/${fileName.slice(0, fileName.length - 4)}txt`;
+  }
+  else if(type == "lzw")
+  {
+    filePath = `./public/uploads/${fileName.slice(0, fileName.length - 3)}txt`;
+  }
   fs.writeFileSync(filePath, decodedString);
   return filePath;
 };
@@ -91,16 +103,16 @@ router.post("/decodeData", upload.single("file"), async (req, res) => {
   if(algos === "huffman"){
     const huffmanObj = new Huffman();
     let [decodedHuffmanString, outputMsg] = huffmanObj.decode(data);
-    let filePath = readWriteFileDecode(req.file.filename, decodedHuffmanString);
+    let filePath = readWriteFileDecode(req.file.filename, decodedHuffmanString,"huff");
     res.download(filePath);
   }else if(algos === "lzw"){
     const lzwObj = new Lzw();
     let decodedLzwString = lzwObj.decode(data);
-    let filePath = readWriteFileDecode(req.file.filename, decodedLzwString);
+    let filePath = readWriteFileDecode(req.file.filename, decodedLzwString,"lzw");
     res.download(filePath);
   }else if(algos === "lz77"){
     let decodedLz77String = Lz77.decompress(data);
-    let filePath = readWriteFileDecode(req.file.filename, decodedLz77String);
+    let filePath = readWriteFileDecode(req.file.filename, decodedLz77String,"lz77");
     res.download(filePath);
   }
 })
