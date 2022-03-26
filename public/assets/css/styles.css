@@ -84,6 +84,15 @@ h6 span{
   transform: translateX(44px) rotate(-270deg);
 }
 
+.card-3d-wrap-compare{
+  position: relative;
+  width: 300px;
+  max-width: 100%;
+  height: 330px;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
 
 .card-3d-wrap {
   position: relative;
