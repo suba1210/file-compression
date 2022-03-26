@@ -41,7 +41,7 @@ const readWriteFile = async(fileName, encodedString, type) => {
     let filePath = `./public/uploads/${fileName.slice(0, fileName.length - 4)}.${type}`;
     let writeStream = fs.createWriteStream(filePath);
     writeStream.write(encodedString);
-    let size = waitAndGetSize(filePath, type);
+    let size = waitAndGetSize(filePath);
     resolve(size);
   })
 
@@ -74,11 +74,29 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
   //chek txt
   //check size
   try{
-    
+    console.log(req.file.filename);
     const data = fs.readFileSync(`./public/uploads/${req.file.filename}`, {
       encoding: "utf8",
       flag: "r",
     });
+    let nameSplit = req.file.filename.split('.');
+		var extension = nameSplit[nameSplit.length - 1].toLowerCase();
+		if (extension != "txt" ) {
+		  req.flash("success_msg","txt files only");
+      res.redirect('/home');
+		}
+    if(!data ||data == null || data == undefined)
+    {
+      req.flash("success_msg", "file uploaded is empty");
+      res.redirect('/home');
+    }
+    let fileSize = await waitAndGetSize(`./public/uploads/${req.file.filename}`);
+    if(fileSize < 1000)
+    {
+      req.flash("success_msg", "file is samll");
+      res.redirect('/home');
+    }
+   
     let huffSize,lzwSize,lz77Size;
   
     const huffmanObj = new Huffman();
@@ -91,7 +109,6 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
   
     let encodedLz77String = Lz77.compress(data);
     lz77Size = await readWriteFile(req.file.filename, encodedLz77String, "lz77");
-    req.flash("success_msg", "test");
     res.send('huff size: ' + huffSize + ' lzw size: ' + lzwSize + ' lz77 size: ' + lz77Size);
   
   }
@@ -109,8 +126,26 @@ router.post("/decodeData", upload.single("file"), async (req, res) => {
       encoding: "utf8",
       flag: "r",
     });
+    if(!data ||data == null || data == undefined)
+    {
+      req.flash("success_msg", "file uploaded is empty");
+      res.redirect('/home');
+    }
     const {algos} = req.body;
-  
+    let nameSplit = req.file.filename.split('.');
+    var extension = nameSplit[nameSplit.length - 1].toLowerCase();
+    if ((extension != "huff" && algos == "huffman" ) ||
+    (extension != "lzw" && algos == "lzw" )||
+    (extension != "lz77" && algos == "lz77" )) {
+      req.flash("success_msg",`.${algos} files only`);
+      res.redirect('/home');
+    }
+    let fileSize = await waitAndGetSize(`./public/uploads/${req.file.filename}`);
+    if(fileSize < 1000)
+    {
+      req.flash("success_msg", "file is samll");
+      res.redirect('/home');
+    }
     if(algos === "huffman"){
       const huffmanObj = new Huffman();
       let [decodedHuffmanString, outputMsg] = huffmanObj.decode(data);
