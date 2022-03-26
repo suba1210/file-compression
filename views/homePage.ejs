@@ -12,6 +12,30 @@
     <title>File Encode - Decode</title>
 </head>
 <body>
+    
+    <h1>Encode Data</h1>
+    <%- include('partials/flash') %>
+    <form action='/encodeData' method="POST" enctype='multipart/form-data'>
+        <input type="file" id="file" name="file" required />
+        <button type="submit">Encode</button>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <h1>Decode Data</h1>
+    <form action='/decodeData' method="POST" enctype='multipart/form-data'>
+        <input type="file" id="file" name="file" required />
+        <br/>
+        <select name="algos" id="algos">
+            <option value="huffman">Huffman</option>
+            <option value="lzw">LZW</option>
+            <option value="lz77">LZ77</option>
+            
+        </select>
+        <button type="submit">DECODE</button>
+        <br/>
+
+    </form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<div class="section">
 		<div class="container">
