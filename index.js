@@ -3,7 +3,7 @@ const path = require('path');
 
 const app = express();
 
-const fileUploadRoutes = require('./routes/fileUploadRoutes');
+const routes = require('./routes/routes');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(fileUploadRoutes);
+app.use(routes);
 
 app.get('/', async(req,res)=>{
     res.redirect('/home');
