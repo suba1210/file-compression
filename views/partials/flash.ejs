@@ -1,0 +1,65 @@
+<style>
+    /* The alert message box */
+    .alert {
+      padding: 12px;
+      background-color: #f44336; /* Red */
+      color: black;
+      opacity: 1;
+      width: 90%;
+      max-width: 450px;
+      margin: auto;
+      /* margin-bottom: 5px; */
+      margin-top: 30px;
+      z-index: 10;
+    }
+    .closebtn {
+      margin-left: 15px;
+      color:black;
+      font-weight: bold;
+      float: right;
+      font-size: 22px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    /* When moving the mouse over the close button */
+    .closebtn:hover {
+      color: black;
+    }
+    .alert.success {
+      background-color: #ffeba7;
+    }
+  </style>
+  
+  <!-- <div class="alert error">
+      error!
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      
+  </div> -->
+  
+  <% if(error != ''){%>
+  <div class="alert error">
+    <%= error %>
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+      >&times;</span
+    >
+  </div>
+  <% } %> <% if(error_msg != ''){%>
+  <div class="alert error">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+      >&times;</span
+    >
+    <%= error_msg %>
+  </div>
+  <% } %> <% if(success_msg != ''){%>
+  <div class="alert success">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';"
+      >&times;</span
+    >
+    <%= success_msg %>
+  </div>
+<% } %>
+
+<script>
+    console.log("got into flash");
+</script>
