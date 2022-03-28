@@ -10,19 +10,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, './public')))
-// app.use(flash());
-// app.use(session({
-//     secret: 'secret',
-//     resave: false,
-//     saveUninitialized: false
-// }))
-// app.use((req, res, next)=>{
-//     res.locals.error_msg = req.flash('error_msg')
-//     res.locals.success_msg = req.flash('success_msg')
-//     res.locals.error = req.flash('error')
-//     next()
-// })
+
 app.use(express.static(path.join(__dirname, 'public')))
 
 const sessionConfig = {
@@ -52,7 +40,6 @@ app.use((req, res, next)=>{
 app.use(routes);
 
 app.get('/', async(req,res)=>{
-    req.flash("success_msg", "test");
     res.redirect('/home');
 });
 

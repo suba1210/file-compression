@@ -74,7 +74,7 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
   //chek txt
   //check size
   try{
-    console.log(req.file.filename);
+    let fileSize = await waitAndGetSize(`./public/uploads/${req.file.filename}`);
     const data = fs.readFileSync(`./public/uploads/${req.file.filename}`, {
       encoding: "utf8",
       flag: "r",
@@ -82,21 +82,20 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
     let nameSplit = req.file.filename.split('.');
 		var extension = nameSplit[nameSplit.length - 1].toLowerCase();
 		if (extension != "txt" ) {
-		  req.flash("success_msg","txt files only");
+		  req.flash("success_msg","Please upload only text files!");
       res.redirect('/home');
 		}
-    if(!data ||data == null || data == undefined)
+    else if(!data ||data == null || data == undefined)
     {
-      req.flash("success_msg", "file uploaded is empty");
+      req.flash("success_msg", "Empty file cannot be encoded!");
       res.redirect('/home');
     }
-    let fileSize = await waitAndGetSize(`./public/uploads/${req.file.filename}`);
-    if(fileSize < 1000)
+    else if(fileSize < 1000)
     {
-      req.flash("success_msg", "file is samll");
+      req.flash("success_msg", "The uploaded file is very small in size. The compressed file might be larger in size than the uncompressed file (compression ratio might be smaller than one). Better compression ratios are achieved for larger file sizes!");
       res.redirect('/home');
     }
-   
+    else{
     let huffSize,lzwSize,lz77Size;
   
     const huffmanObj = new Huffman();
@@ -114,7 +113,8 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
     fileName = fileName.slice(0, fileName.length - 4)
 
     res.render('comparePage',{fileSize,huffSize,lzwSize,lz77Size,fileName});
-  
+
+    }
   }
   catch(error)
   {
@@ -140,7 +140,7 @@ router.post("/decodeData", upload.single("file"), async (req, res) => {
     });
     if(!data ||data == null || data == undefined)
     {
-      req.flash("success_msg", "file uploaded is empty");
+      req.flash("success_msg", "Empty file cannot be decoded!");
       res.redirect('/home');
     }
     const {algos} = req.body;
@@ -149,13 +149,13 @@ router.post("/decodeData", upload.single("file"), async (req, res) => {
     if ((extension != "huff" && algos == "huffman" ) ||
     (extension != "lzw" && algos == "lzw" )||
     (extension != "lz77" && algos == "lz77" )) {
-      req.flash("success_msg",`.${algos} files only`);
+      req.flash("success_msg",`Please upload ${algos} encoded file!`);
       res.redirect('/home');
     }
     let fileSize = await waitAndGetSize(`./public/uploads/${req.file.filename}`);
     if(fileSize < 1000)
     {
-      req.flash("success_msg", "file is samll");
+      req.flash("success_msg", "The uploaded file is very small in size. The compressed file might be larger in size than the uncompressed file (compression ratio might be smaller than one). Better compression ratios are achieved for larger file sizes!");
       res.redirect('/home');
     }
     if(algos === "huffman"){
