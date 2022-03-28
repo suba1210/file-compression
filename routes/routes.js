@@ -109,7 +109,11 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
   
     let encodedLz77String = Lz77.compress(data);
     lz77Size = await readWriteFile(req.file.filename, encodedLz77String, "lz77");
-    res.send('huff size: ' + huffSize + ' lzw size: ' + lzwSize + ' lz77 size: ' + lz77Size);
+
+    let fileName = req.file.filename;
+    fileName = fileName.slice(0, fileName.length - 4)
+
+    res.render('comparePage',{fileSize,huffSize,lzwSize,lz77Size,fileName});
   
   }
   catch(error)

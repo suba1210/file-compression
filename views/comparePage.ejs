@@ -26,10 +26,10 @@
 										<div class="section text-center">
 											<h4 class="mb-3 pb-3">HUFFMAN CODING</h4>
 											<div>
-												<p>Original file size : 2000 Bytes</p>
-												<p>Encoded file size : 23456 Bytes</p>
-												<p>Compression Ratio : 25%</p>
-												<button class="btn mt-4">DOWNLOAD</button>
+												<p>Original file size : <%=fileSize%> Bytes</p>
+												<p>Encoded file size : <%=huffSize%> Bytes</p>
+												<p>Compression Ratio : <%=Number((fileSize/huffSize).toFixed(2))%> </p>
+												<a class="btn mt-4" href="/download/<%=`${fileName}.huff`%>" role="button">DOWNLOAD</a>
 											</div>
 				      					</div>
 			      					</div>
@@ -49,10 +49,10 @@
 										<div class="section text-center">
 											<h4 class="mb-3 pb-3">LZW ALGORITHM</h4>
 											<div>
-												<p>Original file size : 2000 Bytes</p>
-												<p>Encoded file size : 23456 Bytes</p>
-												<p>Compression Ratio : 25%</p>
-												<button class="btn mt-4">DOWNLOAD</button>
+												<p>Original file size : <%=fileSize%> Bytes</p>
+												<p>Encoded file size : <%=lzwSize%> Bytes</p>
+												<p>Compression Ratio : <%= Number((fileSize/lzwSize).toFixed(2)) %> </p>
+												<a class="btn mt-4" href="/download/<%=`${fileName}.lzw`%>" role="button">DOWNLOAD</a>
 											</div>
 				      					</div>
 			      					</div>
@@ -72,10 +72,10 @@
 										<div class="section text-center">
 											<h4 class="mb-3 pb-3">LZ77 ALGORITHM</h4>
                                             <div>
-												<p>Original file size : 2000 Bytes</p>
-												<p>Encoded file size : 23456 Bytes</p>
-												<p>Compression Ratio : 25%</p>
-												<button class="btn mt-4">DOWNLOAD</button>
+												<p>Original file size : <%=fileSize%> Bytes</p>
+												<p>Encoded file size : <%=lz77Size%> Bytes</p>
+												<p>Compression Ratio : <%= Number((fileSize/lz77Size).toFixed(2)) %> </p>
+												<a class="btn mt-4" href="/download/<%=`${fileName}.lz77`%>" role="button">DOWNLOAD</a>
 											</div>
 				      					</div>
 			      					</div>
