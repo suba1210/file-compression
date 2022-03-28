@@ -119,6 +119,14 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
   
 });
 
+router.get("/download/:fileName",async(req,res)=>{
+  try{
+    let filePath = `./public/uploads/${req.params.fileName}`
+    res.download(filePath);
+  }catch(error){
+    console.log(error);
+  }
+})
 
 router.post("/decodeData", upload.single("file"), async (req, res) => {
   try{
