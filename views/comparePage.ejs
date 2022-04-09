@@ -30,6 +30,7 @@
 												<p>Original file size : <%=fileSize%> Bytes</p>
 												<p>Encoded file size : <%=huffSize%> Bytes</p>
 												<p>Compression Ratio : <%=Number((fileSize/huffSize).toFixed(2))%> </p>
+												<p>Compression time : <%= huffTime %> </p>
 												<a class="btn mt-4" href="/download/<%=`${fileName}.huff`%>" role="button">DOWNLOAD</a>
 											</div>
 				      					</div>
@@ -53,6 +54,7 @@
 												<p>Original file size : <%=fileSize%> Bytes</p>
 												<p>Encoded file size : <%=lzwSize%> Bytes</p>
 												<p>Compression Ratio : <%= Number((fileSize/lzwSize).toFixed(2)) %> </p>
+												<p>Compression time : <%=lzwTime%> </p>
 												<a class="btn mt-4" href="/download/<%=`${fileName}.lzw`%>" role="button">DOWNLOAD</a>
 											</div>
 				      					</div>
@@ -76,6 +78,7 @@
 												<p>Original file size : <%=fileSize%> Bytes</p>
 												<p>Encoded file size : <%=lz77Size%> Bytes</p>
 												<p>Compression Ratio : <%= Number((fileSize/lz77Size).toFixed(2)) %> </p>
+												<p>Compression time : <%=lz77Time%> </p>
 												<a class="btn mt-4" href="/download/<%=`${fileName}.lz77`%>" role="button">DOWNLOAD</a>
 											</div>
 				      					</div>

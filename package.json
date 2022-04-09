@@ -20,6 +20,7 @@
     "fs": "0.0.1-security",
     "lzbase62": "^2.0.0",
     "multer": "^1.4.4",
+    "perf_hooks": "0.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

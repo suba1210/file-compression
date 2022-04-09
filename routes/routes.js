@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
+const { performance } = require('perf_hooks');
 const Huffman = require("../algorithms/huffman/huffman");
 const Lzw = require("../algorithms/lzw/lzw");
 const Lz77 = require("lzbase62");
@@ -99,20 +100,30 @@ router.post("/encodeData", upload.single("file"), async (req, res) => {
     let huffSize,lzwSize,lz77Size;
   
     const huffmanObj = new Huffman();
+    let startTime = performance.now()
     let [encodedHuffmanString, outputMsg] = huffmanObj.encode(data);
+    let endTime = performance.now()
     huffSize = await readWriteFile(req.file.filename, encodedHuffmanString, "huff");
+    let huffTime = (endTime - startTime).toFixed(2);
   
     const lzwObj = new Lzw();
+    startTime = performance.now()
     let encodedLzwString = lzwObj.encode(data);
+    endTime = performance.now()
     lzwSize = await readWriteFile(req.file.filename, encodedLzwString, "lzw");
+    let lzwTime = (endTime - startTime).toFixed(2);
   
+    startTime = performance.now()
     let encodedLz77String = Lz77.compress(data);
+    endTime = performance.now()
     lz77Size = await readWriteFile(req.file.filename, encodedLz77String, "lz77");
+    let lz77Time = (endTime - startTime).toFixed(2);
+
 
     let fileName = req.file.filename;
     fileName = fileName.slice(0, fileName.length - 4)
 
-    res.render('comparePage',{fileSize,huffSize,lzwSize,lz77Size,fileName});
+    res.render('comparePage',{fileSize,huffSize,lzwSize,lz77Size,huffTime,lzwTime,lz77Time,fileName});
 
     }
   }
