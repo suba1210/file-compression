@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -43,6 +47,8 @@ app.get('/', async(req,res)=>{
     res.redirect('/home');
 });
 
-app.listen(3000, () => {
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
     console.log('Serving on port 3000');
 });
