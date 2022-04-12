@@ -17,6 +17,11 @@ A simple web application to demonstrate the file encoding and decoding technique
 <img src="screenshots/decode.png" width="700">
 <img src="screenshots/compare.png" width="700">
 
+## Performance analysis
+<img src="screenshots/compression_ratio.jpeg" width="700">
+<img src="screenshots/compression_time.png" width="700">
+
+
 
 ## Setup
 
